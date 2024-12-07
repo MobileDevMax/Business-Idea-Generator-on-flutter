@@ -1,0 +1,70 @@
+import 'package:flutter/material.dart';
+import 'dart:math';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Business Idea Generator',
+      home: HomeScreen(),
+    );
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  final IdeaGenerator generator = IdeaGenerator();
+
+  void _generateIdea(BuildContext context) {
+    BusinessIdea idea = generator.getRandomIdea();
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text("Business Idea"),
+        content: Text(idea.idea),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: Text("Close"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Business Idea Generator")),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () => _generateIdea(context),
+          child: Text("Generate Idea"),
+        ),
+      ),
+    );
+  }
+}
+
+class BusinessIdea {
+  final String idea;
+  BusinessIdea(this.idea);
+}
+
+class IdeaGenerator {
+  final List<String> ideas = [
+    'Pet cafe',
+    'Skill exchange platform',
+    'Mobile app for ordering organic products',
+    'Farmers market delivery service',
+    'Fitness club'
+  ];
+
+  BusinessIdea getRandomIdea() {
+    final random = Random();
+    return BusinessIdea(ideas[random.nextInt(ideas.length)]);
+  }
+}
